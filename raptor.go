@@ -19,7 +19,7 @@ type Raptor struct {
 	config      *Config
 	server      *fiber.App
 	coordinator *coordinator
-	routes      Routes
+	router      *Router
 }
 
 func NewRaptor() *Raptor {
@@ -150,9 +150,9 @@ func (r *Raptor) controllers(c Controllers) {
 	}
 }
 
-func (r *Raptor) Routes(routes Routes) {
-	r.routes = routes
-	for _, route := range r.routes {
+func (r *Raptor) Router(router *Router) {
+	r.router = router
+	for _, route := range r.router.routes {
 		if _, ok := r.coordinator.actions[route.Controller][route.Action]; !ok {
 			r.Utils.Log.Error(fmt.Sprintf("Action %s not found in controller %s for path %s!", route.Action, route.Controller, route.Path))
 			os.Exit(1)
